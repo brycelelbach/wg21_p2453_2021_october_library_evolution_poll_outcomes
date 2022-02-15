@@ -1,0 +1,179 @@
+<pre class='metadata'>
+Title: 2021 October Library Evolution and Concurrency Networking and Executors Poll Outcomes
+Shortname: D2452
+Revision: 0
+Status: D
+Group: WG21
+Audience: WG21
+Editor: Bryce Adelstein Lelbach (he/him/his) — Library Evolution Chair, NVIDIA, brycelelbach@gmail.com
+Editor: Fabio Fracassi — Library Evolution Vice Chair, CODE University of Applied Sciences, f.fracassi@gmx.net
+Editor: Ben Craig — Library Evolution Vice Chair, NI, ben.craig@gmail.com
+URL: https://wg21.link/P2452
+!Source: <a href="https://github.com/brycelelbach/wg21_p2452_2022_october_library_evolution_poll_outcomes/blob/main/2022_october_library_evolution_poll_outcomes.bs">GitHub</a>
+Issue Tracking: GitHub https://github.com/brycelelbach/wg21_p2452_2022_october_library_evolution_poll_outcomes/issues
+Metadata Order: Editor, This Version, Source, Issue Tracking, Project, Audience
+Markup Shorthands: markdown yes
+Toggle Diffs: no
+No Abstract: yes
+Boilerplate: style-syntax-highlighting off
+Default Biblio Display: direct
+</pre>
+
+<style>
+table, th, tr, td {
+  border: 2px solid black !important;
+}
+@media (prefers-color-scheme: dark) {
+  table, th, tr, td {
+    border: 2px solid white !important;
+  }
+}
+</style>
+
+# Introduction # {#introduction}
+
+In October 2021, the C++ Library Evolution group conducted a series of
+  electronic decision polls on Networking and Executors [[P2452R0]].
+This paper provides the results of those polls and summarizes the results.
+
+In total, 56 people participated in the polls.
+Some participants opted to not vote on some polls.
+Thank you to everyone who participated, and to the proposal authors for all
+  their hard work!
+
+# Poll Outcomes # {#poll-outcomes}
+
+* SF: Strongly Favor.
+* WF: Weakly Favor.
+* N: Neutral.
+* WA: Weakly Against.
+* SA: Strongly Against.
+
+<table>
+<tr>
+<th style="padding-bottom: 10px;">Poll
+<th>SF
+<th>WF
+<th>N
+<th>WA
+<th>SA
+<th>Outcome
+
+<tr>
+<td style="padding-bottom: 16px;">
+Poll 1: The Networking TS/Asio async model (P2444) is a good basis for most asynchronous use cases, including networking, parallelism, and GPUs.
+<td>5
+<td>10
+<td>6
+<td>14
+<td>18
+<td>Weak consensus against.
+
+What this doesn't mean: It doesn't mean that the Networing TS async model isn't a good fit for networking. There were many comments to the contrary.
+
+What this means: If the authors continue to pursue a design similar to the current Networking TS, they would have an easier time getting consensus by focusing on the networking side of things, rather than proposing the design for general asynchrony.
+
+<tr>
+<td style="padding-bottom: 16px;">
+Poll 2: The sender/receiver model (P2300) is a good basis for most asynchronous use cases, including networking, parallelism, and GPUs.
+<td>24
+<td>16
+<td>3
+<td>6
+<td>3
+<td>Consensus in favor.
+
+What this doesn't mean: It doesn't mean that S&R is going into C++23 (though it might). It doesn't mean that [[P2300R2]] as it stands today will be sent forward to Library. It doesn't prevent us from adding new asynchronous models in the future.
+
+What this means: Work will continue in Library Evolution on refining [[P2300R2]], and Library Evolution will keep the various asynchronous use cases in mind while working on [[P2300R2]].
+
+<tr>
+<td style="padding-bottom: 16px;">
+Poll 3: Stop pursuing the Networking TS/Asio design as the C++ Standard Library's answer for networking.
+<td>13
+<td>13
+<td>8
+<td>6
+<td>10
+<td>No consensus.
+
+What this doesn't mean: The Networking TS is not "dead".
+
+What this means: The C++ Committee will still work on networking in this general form, but the authors need to do a lot in order to build up consensus to get something like the TS merged into the standard. The bulk of this work should be done in Networking Study Group. Many of the people in favor of stopping work on the TS would like networking to be built on top of Senders and Receivers. Others were opposed to the lack of security through Transport Layer Security (TLS). It is highly unlikely that design changes to the Networking TS can be made fast enough, and consensus gained fast enough, for networking to make C++23.
+
+<tr>
+<td style="padding-bottom: 16px;">
+Poll 4: Networking in the C++ Standard Library should be based on the sender/receiver model (P2300).
+<td>17
+<td>11
+<td>10
+<td>4
+<td>6
+<td>Weak consensus.
+
+What this doesn't mean: Work on networking using other models will still be reviewed and considered on its own merits. WG21 doesn't pause work on a concrete paper based off of the wish for another paper. Note that there are a high number of neutrals on this vote. Many of the neutrals (and some of the abstentions) would like to see a paper before picking a side here.
+
+What this means: In the short term, this poll result doesn't mean much. We don't have a paper in hand that proposes networking based on the [[P2300R2]] model. For paper authors though, this poll is encouragement to do work in the area of networking based on senders and receivers, or to be prepared with compelling new information on why networking should use a different model.
+
+<tr>
+<td style="padding-bottom: 16px;">
+Poll 5: It is acceptable to ship socket-based networking in the C++ Standard Library that does not support secure sockets (TLS/DTLS).
+<td>9
+<td>13
+<td>5
+<td>6
+<td>13
+<td>No consensus.
+
+What this means: A networking library that does not support secure sockets will face significant headwinds getting through the standardization process.
+
+What this doesn't mean: This doesn't make a statement on whether insecure networking should be included, the defaults of secure vs. insecure, or how things like ABI should managed.
+
+</table>
+
+# Networking Study Group Guidance # {#networking-study-group-guidance}
+
+Before bringing networking papers back to Library Evolution, two major areas
+  need to be thoroughly addressed: Security, and the Senders and Receivers async
+  model [[P2300R2]].
+
+Those voting in favor of Poll 5 argued that the insecure parts are the building
+  blocks for the secure parts, and that ABI is major concern that will plague TLS
+  support. Those voting against Poll 5 argued that secure sockets are needed for
+  communicating with many sites on the internet, and that shipping without secure
+  sockets would be irresponsible. A networking proposal needs to address these
+  concerns before coming to LEWG.
+
+As for networking in combination with Senders and Receivers, the following poll
+  result from the [2021-09-28 telecon](https://wiki.edg.com/bin/view/Wg21telecons2021/Executors-2021-09-28)
+  may be informative:
+
+__POLL: We believe we need one grand unified model for asynchronous execution in the C++ Standard Library, that covers structured concurrency, event based programming, active patterns, etc.__
+
+|Strongly Favor|Weakly Favor|Neutral|Weakly Against|Strongly Against|
+|-|-|-|-|-|
+|4|9|5|5|1|
+
+__Outcome:__ No consensus (leaning in favor)
+
+The combination of this "grand unified model" poll and Poll 4 heavily
+  encourages the networking study group to produce a paper based on Senders and
+  Receivers. There is room to produce a non-S&R paper, but such a paper would
+  need to provide compelling new information in order to convince the "grand
+  unified model" contingent that S&R can't get the job done suitably.
+
+
+
+<pre class=biblio>
+{
+  "P2452R0": {
+    "title": "2021 October Library Evolution and Concurrency Polls on Networking and Executors",
+    "authors": [
+      "Bryce Adelstein Lelbach"
+    ],
+    "href": "https://wg21.link/P2452R0",
+    "date": "2022-02-15"
+  }
+}
+</pre>
+
